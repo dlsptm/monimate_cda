@@ -176,3 +176,6 @@ def alternate_case(s):
     return ''.join([letter.upper() if index % 2 == 0 else letter.lower() for index, letter in enumerate(s)])
 
 '''
+
+
+

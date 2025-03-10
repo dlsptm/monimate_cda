@@ -4,15 +4,15 @@ from app.models.UserPreference import UserPreference
 
 class UserPreferenceRepository:
     @staticmethod
-    def create(user_type, preference, user_id, account_id):
+    def create(type, preference, user_id, account_id):
         """
         Crée une nouvelle préférence utilisateur.
         """
         new_preference = UserPreference(
-            type=user_type,
+            type=type,
             preference=preference,
             user_id=user_id,
-            account_id=account_id,
+            account_id=account_id
         )
         db.session.add(new_preference)
         db.session.commit()
@@ -35,12 +35,9 @@ class UserPreferenceRepository:
     @staticmethod
     def get_by_user_and_account(user_id, account_id):
         """
-        Récupère une préférence utilisateur en fonction
-        de l'ID utilisateur et de l'ID du compte.
+        Récupère une préférence utilisateur en fonction de l'ID utilisateur et de l'ID du compte.
         """
-        return UserPreference.query.filter_by(
-            user_id=user_id, account_id=account_id
-        ).all()
+        return UserPreference.query.filter_by(user_id=user_id, account_id=account_id).all()
 
     @staticmethod
     def update(preference_id, **kwargs):

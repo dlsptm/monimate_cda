@@ -1,7 +1,6 @@
-from datetime import date
-
-from app.enums.goal_status_enum import GoalStatusEnum
 from app.extensions import db
+from app.enums.GoalStatusEnum import GoalStatusEnum
+from datetime import date
 from app.models.Goal import Goal
 
 
@@ -16,7 +15,7 @@ class GoalRepository:
             amount=amount,
             deadline=deadline if deadline else date.today(),
             status=status,
-            user_id=user_id,
+            user_id=user_id
         )
         db.session.add(goal)
         db.session.commit()

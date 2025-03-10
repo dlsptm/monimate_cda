@@ -1,14 +1,17 @@
 from app.extensions import db
 from app.models.Invoice import Invoice
 
-
 class InvoiceRepository:
     @staticmethod
     def create(title, link, transaction_id):
         """
         Crée une nouvelle facture.
         """
-        invoice = Invoice(title=title, link=link, transaction_id=transaction_id)
+        invoice = Invoice(
+            title=title,
+            link=link,
+            transaction_id=transaction_id
+        )
         db.session.add(invoice)
         db.session.commit()
         return invoice

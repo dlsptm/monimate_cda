@@ -8,7 +8,10 @@ class ParticipantRepository:
         """
         Crée un nouveau participant associé à un utilisateur et un compte.
         """
-        new_participant = Participant(user_id=user_id, account_id=account_id)
+        new_participant = Participant(
+            user_id=user_id,
+            account_id=account_id
+        )
         db.session.add(new_participant)
         db.session.commit()
         return new_participant

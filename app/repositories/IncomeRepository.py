@@ -1,7 +1,6 @@
-from datetime import datetime, timezone
-
 from app.extensions import db
 from app.models.Income import Income
+from datetime import datetime, timezone
 
 
 class IncomeRepository:
@@ -14,7 +13,7 @@ class IncomeRepository:
             title=title,
             amount=amount,
             user_id=user_id,
-            created_at=datetime.now(timezone.utc),
+            created_at=datetime.now(timezone.utc)
         )
         db.session.add(income)
         db.session.commit()

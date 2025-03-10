@@ -1,7 +1,7 @@
 from app.extensions import db
-from app.models.Account import Account
 from app.models.User import User
-
+from app.models.Account import Account
+import uuid
 
 class UserRepository:
 
@@ -9,25 +9,26 @@ class UserRepository:
         self.bcrypt = bcrypt_instance
 
     @staticmethod
-    def create(user_data):
+    def create(email, username, password, role=None, last_active=None, is_active=False,):
         """
-        Crée un nouvel utilisateur avec les informations données.
+             Crée un nouvel utilisateur avec les informations données.
         """
         try:
-            if user_data.get("role") is None:
-                user_data.set("role", ["ROLE_USER"])
+            if role is None:
+                role = ["ROLE_USER"]
 
             new_user = User(
-                email=user_data.get("email"),
-                username=user_data.get("username"),
-                password=user_data.get("password"),
-                is_active=user_data.get("is_active"),
-                role=user_data.get("role"),
-                last_active=user_data.get("last_active"),
+                id=str(uuid.uuid4()),
+                email=email,
+                username=username,
+                password=password,
+                is_active=is_active,
+                role=role,
+                last_active=last_active
             )
 
             default_account = Account()
-            default_account.title = "Compte " + user_data.get("username")
+            default_account.title = "Compte " + username
             default_account.owner_id = new_user.get_id()
 
             db.session.add(new_user)
@@ -38,12 +39,14 @@ class UserRepository:
             print(f"Erreur lors de la création de l'utilisateur : {e}")
             return None
 
+
     @staticmethod
     def get_all():
         """
         Récupère tous les utilisateurs.
         """
         return User.query.all()
+
 
     @staticmethod
     def get_by_id(user_id):
@@ -52,12 +55,14 @@ class UserRepository:
         """
         return User.query.get(user_id)
 
+
     @staticmethod
     def get_by_email(email):
         """
         Récupère un utilisateur spécifique par son email.
         """
         return User.query.filter_by(email=email).first()
+
 
     @staticmethod
     def update(user_id, **kwargs):
@@ -71,6 +76,7 @@ class UserRepository:
                     setattr(user, key, value)
             db.session.commit()
         return user
+
 
     @staticmethod
     def delete(user_id):
