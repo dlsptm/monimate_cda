@@ -54,7 +54,7 @@ def test_register_success(client):
         'is_active': True,
     })
     assert response.status_code == 201
-    assert b"User registered" in response.data
+    assert b"User registered." in response.data
 
 def test_register_existing_email(client):
     """Test d'un enregistrement avec un email déjà existant"""
