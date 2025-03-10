@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %} FILTERS {% endblock %}
+{% block body %}
+  <h1>Filters</h1>
+  <p>{{ text }}</p>
+  <p>{{ text|upper}}</p>
+  <p>{{ text|lower }}</p>
+  <p>{{ text|replace('n', 'TN') }}</p>
+  <p>{{ text|title }}</p>
+  <p>{{ text|reverse_string }}</p>
+  <p>{{ text|repeat }}</p>
+  <p>{{ text|repeat(2) }}</p>
+  <p>{{ text|alternate_case }}</p>
+  <p>{{ text|alternate_case|repeat(10) }}</p>
+{% endblock %}

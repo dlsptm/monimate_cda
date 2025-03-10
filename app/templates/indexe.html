@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %} TEST {% endblock %}
+
+{% block body %}
+<p>ceci est le body de index.html</p>
+
+<h1>Hello {{ name }}</h1>
+    <p>{{ mylist }}</p>
+    <ul>
+        {% for i in mylist %}
+            <li {% if i == 5 %} style="color:red" {% endif %}> {{ i }} </li>
+        {% endfor %}
+    </ul>
+
+    <p>{{ ines }}</p>
+
+    <a href="{{ url_for('filters') }}">COUCOU</a>
+
+
+<h1>form</h1>
+
+    <form method="POST" action="{{ url_for('index') }}">
+        <input type="text" name="username" placeholder="name">
+        <input type="password" name="password" placeholder="password">
+        <button>valider</button>
+    </form>
+
+<h1>file</h1>
+
+    <form method="POST" action="{{ url_for('file') }}" enctype="multipart/form-data">
+        <input type="file" name="file" placeholder="file" accept="image/jpeg, text/plain, image/png, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+        <button>valider</button>
+    </form>
+
+<h1>convert file</h1>
+
+    <form method="POST" action="{{ url_for('convert_file_two') }}" enctype="multipart/form-data">
+        <input type="file" name="file" placeholder="file" accept="image/jpeg, text/plain, image/png, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+        <button>valider</button>
+    </form>
+
+<h1>Javascript Json Request</h1>
+
+<button id="post_btn">Send JSON Request</button>
+
+<h1>static file</h1>
+<img src="/img/img.jpg">
+
+<h1>SESSION</h1>
+<p>{{ message }}</p>
+
+<a href=" {{ url_for('set_data') }}">Set Session</a>
+<a href=" {{ url_for('get_data') }}">Get Session Data</a>
+<a href=" {{ url_for('erase_data') }}">Erase Session Data</a>
+
+
+<h1>COOKIES</h1>
+<p>{{ message }}</p>
+<a href=" {{ url_for('set_cookie') }}">Set Cookie</a>
+<a href=" {{ url_for('get_cookie') }}">Get Cookie</a>
+<a href=" {{ url_for('erase_cookie') }}">Erase Cookie</a>
+
+
+<h1>flashes</h1>
+
+    <form method="POST" action="{{ url_for('login') }}">
+        <input type="text" name="username" placeholder="name">
+        <input type="password" name="password" placeholder="password">
+        <button>valider</button>
+    </form>
+
+<script>
+    const postBtn = document.getElementById('post_btn');
+    const jsonData = {name: 'Ines', greeting: 'Hello'};
+
+    postBtn.addEventListener('click', () => {
+        fetch('{{ url_for("handle_post") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            },
+            body: JSON.stringify(jsonData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erreur: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Succès:', data);
+        })
+        .catch(error => {
+            console.error('Erreur lors de l\'envoi:', error);
+        });
+    });
+</script>
+{% endblock %}
