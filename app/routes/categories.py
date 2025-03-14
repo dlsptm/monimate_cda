@@ -1,8 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template, flash, redirect, url_for
 from app.repositories.CategoryRepository import CategoryRepository as category_repository
 
-
-
 categories = Blueprint('categories', __name__)
 
 @categories.route('/category/<account>')
