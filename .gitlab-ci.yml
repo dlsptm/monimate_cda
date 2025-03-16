@@ -18,6 +18,7 @@ build-job:
     - docker build -t $CI_REGISTRY_IMAGES .
     - docker push $CI_REGISTRY_IMAGES
 
+
 pycs-job:
   stage: pycs
   script:
