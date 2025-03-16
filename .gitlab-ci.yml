@@ -11,6 +11,9 @@ build-job:
   stage: build
   inherit:
     default: false
+  image: docker
+  services:
+    - docker:dind
   before_script:
     - mkdir -p $HOME/.docker
     - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
