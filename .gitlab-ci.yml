@@ -25,7 +25,7 @@ setup-back-job:
   before_script:
     - apk update
     - apk add --no-cache python3 py3-pip
-    - pip install poetry
+    - pip3 install poetry
     - poetry install --no-root
   script:
     - source $(poetry env info --path)/bin/activate
