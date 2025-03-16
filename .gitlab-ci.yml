@@ -1,10 +1,10 @@
 image: monimate-back-test
 
 stages:
+  - build
   - pycs
   - pystan
   - test
-  - build
   - deploy
 
 
