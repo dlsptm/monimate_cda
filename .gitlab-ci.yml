@@ -1,8 +1,8 @@
 default:
-  image: docker
+  image: docker:24.0.5
   services:
-    - docker:dind
-    -
+    - docker:24.0.5-dind
+
 stages:
   - build
   - pycs
@@ -10,14 +10,18 @@ stages:
   - test
   - deploy
 
+before_script:
+  - mkdir -p $HOME/.docker
+  - echo "$DOCKER_AUTH_CONFIG" > $HOME/.docker/config.json
+  - pip install poetry
+  - poetry install --no-root
+  - source $(poetry env info --path)/bin/activate
 
 build-job:
   stage: build
   script:
-    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER  $CI_REGISTRY --password-stdin
     - docker build -t $CI_REGISTRY_IMAGE .
     - docker push $CI_REGISTRY_IMAGE
-
 
 pycs-job:
   stage: pycs
@@ -32,7 +36,7 @@ pycs-job:
 pystan-job:
   stage: pystan
   needs:
-    - [ 'build-job' ]
+    - ['build-job']
   script:
     - poetry run mypy app/
     - poetry run pylint app/
@@ -41,7 +45,7 @@ pystan-job:
 test-job:
   stage: test
   needs:
-    - [ 'build-job' ]
+    - ['build-job']
   script:
     - poetry run pytest
 
