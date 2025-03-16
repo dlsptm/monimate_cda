@@ -7,6 +7,17 @@ stages:
   - build
   - deploy
 
+
+build-job:
+  stage: build
+  image: docker
+  services:
+    - docker:bind
+  script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER  $CI_REGISTRY --password-stdin
+    - docker build -t $CI_REGISTRY_IMAGES .
+    - docker push $CI_REGISTRY_IMAGES
+
 pycs-job:
   stage: pycs
   script:
@@ -26,11 +37,6 @@ test-job:
   stage: test
   script:
     - poetry run pytest
-
-build-job:
-  stage: build
-  script:
-    - echo "Construction du projet..."
 
 deploy-job:
   stage: deploy
