@@ -23,8 +23,8 @@ setup-back-job:
   needs:
     - ['build-job']
   before_script:
-    - apt-get update && apt-get install -y libpq-dev gcc git
-    - apt-get install python3.13
+    - apk update
+    - apk add --no-cache python3 py3-pip
     - pip install poetry
     - poetry install --no-root
   script:
