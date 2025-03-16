@@ -17,8 +17,11 @@ cache:
 
 before_script:
   - apk update
-  - apk add --no-cache python3 py3-pip
-  - pip3 install poetry
+  - apk add --no-cache python3=3.13 py3-pip
+  - python3 -m venv /venv
+  - . /venv/bin/activate
+  - pip install --upgrade pip
+  - pip install poetry
 
 build-job:
   stage: build
