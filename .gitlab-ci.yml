@@ -26,16 +26,16 @@ setup-back-job:
   image: $CI_REGISTRY_IMAGE
   needs:
     - ['build-job']
-  script:
+  before_script:
     - poetry install --no-root
+  script:
+    - poetry add pytest mypy pylint bandit autopep8 flake8 black isort
 
 pycs-job:
   stage: pycs
   image: $CI_REGISTRY_IMAGE
   needs:
     - ['setup-back-job']
-  before_script:
-    - poetry add autopep8 flake8 black isort
   script:
     - poetry run autopep8 --in-place --aggressive --recursive .
     - poetry run flake8 app/
@@ -47,8 +47,6 @@ pystan-job:
   image: $CI_REGISTRY_IMAGE
   needs:
     - ['setup-back-job']
-  before_script:
-    - poetry add mypy pylint bandit
   script:
     - poetry run mypy app/
     - poetry run pylint app/
@@ -59,8 +57,6 @@ test-job:
   image: $CI_REGISTRY_IMAGE
   needs:
     - ['setup-back-job']
-  before_script:
-    - poetry add pytest
   script:
     - poetry run pytest
 
