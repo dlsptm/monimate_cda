@@ -5,28 +5,33 @@ default:
 
 stages:
   - build
+  - setup-back
   - pycs
   - pystan
   - test
   - deploy
 
-before_script:
-  - mkdir -p $HOME/.docker
-  - echo "$DOCKER_AUTH_CONFIG" > $HOME/.docker/config.json
-  - pip install poetry
-  - poetry install --no-root
-  - source $(poetry env info --path)/bin/activate
-
 build-job:
   stage: build
   script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER  $CI_REGISTRY --password-stdin
     - docker build -t $CI_REGISTRY_IMAGE .
     - docker push $CI_REGISTRY_IMAGE
+
+setup-back-job:
+  stage: setup-back
+  needs:
+    - ['build-job']
+  before_script:
+    - pip install poetry
+    - poetry install --no-root
+  script:
+    - source $(poetry env info --path)/bin/activate
 
 pycs-job:
   stage: pycs
   needs:
-    - ['build-job']
+    - ['setup-back-job']
   script:
     - poetry run autopep8 --in-place --aggressive --recursive .
     - poetry run flake8 app/
@@ -36,7 +41,7 @@ pycs-job:
 pystan-job:
   stage: pystan
   needs:
-    - ['build-job']
+    - ['setup-back-job']
   script:
     - poetry run mypy app/
     - poetry run pylint app/
@@ -45,7 +50,7 @@ pystan-job:
 test-job:
   stage: test
   needs:
-    - ['build-job']
+    - ['setup-back-job']
   script:
     - poetry run pytest
 
