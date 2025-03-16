@@ -8,11 +8,7 @@ class TicketRepository:
         """
         Crée un nouveau ticket avec un sujet, un statut et un utilisateur.
         """
-        new_ticket = Ticket(
-            subject=subject,
-            status=status,
-            user_id=user_id
-        )
+        new_ticket = Ticket(subject=subject, status=status, user_id=user_id)
         db.session.add(new_ticket)
         db.session.commit()
         return new_ticket

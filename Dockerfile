@@ -6,9 +6,8 @@ RUN apt-get update && apt-get install -y libpq-dev gcc git &&\
 
 ENV PATH="/root/.local/bin:$PATH"
 
-
 WORKDIR /app
 
 EXPOSE 9898
 
-CMD sh -c "poetry install && poetry run python run.py"
+CMD sh -c "poetry install --no-root && poetry run python run.py"

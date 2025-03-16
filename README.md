@@ -1,6 +1,4 @@
-# monimate
-
-
+# Monimate
 
 ## Getting started
 

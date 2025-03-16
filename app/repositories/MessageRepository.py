@@ -8,11 +8,7 @@ class MessageRepository:
         """
         Crée un nouveau message.
         """
-        new_message = Message(
-            message=message,
-            ticket_id=ticket_id,
-            sender_id=sender_id
-        )
+        new_message = Message(message=message, ticket_id=ticket_id, sender_id=sender_id)
         db.session.add(new_message)
         db.session.commit()
         return new_message

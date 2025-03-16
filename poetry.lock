@@ -54,21 +54,6 @@ test = ["anyio[trio]", "coverage[toml] (>=7)", "exceptiongroup (>=1.2.0)", "hypo
 trio = ["trio (>=0.26.1)"]
 
 [[package]]
-name = "asgiref"
-version = "3.8.1"
-description = "ASGI specs, helper code, and adapters"
-optional = false
-python-versions = ">=3.8"
-groups = ["main"]
-files = [
-    {file = "asgiref-3.8.1-py3-none-any.whl", hash = "sha256:3e1e3ecc849832fe52ccf2cb6686b7a55f82bb1d6aee72a58826471390335e47"},
-    {file = "asgiref-3.8.1.tar.gz", hash = "sha256:c343bd80a0bec947a9860adb4c432ffa7db769836c64238fc34bdc3fec84d590"},
-]
-
-[package.extras]
-tests = ["mypy (>=0.800)", "pytest", "pytest-asyncio"]
-
-[[package]]
 name = "bcrypt"
 version = "4.2.1"
 description = "Modern password hashing for your software and your servers"
@@ -316,27 +301,6 @@ files = [
 [package.extras]
 docs = ["ipython", "matplotlib", "numpydoc", "sphinx"]
 tests = ["pytest", "pytest-cov", "pytest-xdist"]
-
-[[package]]
-name = "django"
-version = "5.1.7"
-description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
-optional = false
-python-versions = ">=3.10"
-groups = ["main"]
-files = [
-    {file = "Django-5.1.7-py3-none-any.whl", hash = "sha256:1323617cb624add820cb9611cdcc788312d250824f92ca6048fda8625514af2b"},
-    {file = "Django-5.1.7.tar.gz", hash = "sha256:30de4ee43a98e5d3da36a9002f287ff400b43ca51791920bfb35f6917bfe041c"},
-]
-
-[package.dependencies]
-asgiref = ">=3.8.1,<4"
-sqlparse = ">=0.3.1"
-tzdata = {version = "*", markers = "sys_platform == \"win32\""}
-
-[package.extras]
-argon2 = ["argon2-cffi (>=19.1.0)"]
-bcrypt = ["bcrypt"]
 
 [[package]]
 name = "et-xmlfile"
@@ -1677,22 +1641,6 @@ pymysql = ["pymysql"]
 sqlcipher = ["sqlcipher3_binary"]
 
 [[package]]
-name = "sqlparse"
-version = "0.5.3"
-description = "A non-validating SQL parser."
-optional = false
-python-versions = ">=3.8"
-groups = ["main"]
-files = [
-    {file = "sqlparse-0.5.3-py3-none-any.whl", hash = "sha256:cf2196ed3418f3ba5de6af7e82c694a9fbdbfecccdfc72e281548517081f16ca"},
-    {file = "sqlparse-0.5.3.tar.gz", hash = "sha256:09f67787f56a0b16ecdbde1bfc7f5d9c3371ca683cfeaa8e6ff60b4807ec9272"},
-]
-
-[package.extras]
-dev = ["build", "hatch"]
-doc = ["sphinx"]
-
-[[package]]
 name = "starlette"
 version = "0.41.3"
 description = "The little ASGI library that shines."
@@ -1810,4 +1758,4 @@ test = ["pytest (>=6.0.0)", "setuptools (>=65)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13"
-content-hash = "b8536732d3219a1ff3ff47c651f4a53e0ee5fa08243d7e22bd3de886c9f0da9f"
+content-hash = "86ab627d76e5dfb8edff66a818ed1c1b83f044849b45ea7ee0dc2968b467182a"

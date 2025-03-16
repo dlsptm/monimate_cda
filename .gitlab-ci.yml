@@ -1,0 +1,38 @@
+image: monimate-back-test
+
+stages:
+  - pycs
+  - pystan
+  - test
+  - build
+  - deploy
+
+pycs-job:
+  stage: pycs
+  script:
+    - poetry run autopep8 --in-place --aggressive --recursive .
+    - poetry run flake8 app/
+    - poetry run black app/
+    - poetry run isort app/
+
+pystan-job:
+  stage: pystan
+  script:
+    - poetry run mypy app/
+    - poetry run pylint app/
+    - poetry run bandit -r app/
+
+test-job:
+  stage: test
+  script:
+    - poetry run pytest
+
+build-job:
+  stage: build
+  script:
+    - echo "Construction du projet..."
+
+deploy-job:
+  stage: deploy
+  script:
+    - echo "Déploiement de l'application..."

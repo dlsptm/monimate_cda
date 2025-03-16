@@ -1,5 +1,6 @@
 import enum
 
+
 class PaymentFrequencyEnum(enum.Enum):
     once = "once"
     weekly = "weekly"
