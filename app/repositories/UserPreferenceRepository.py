@@ -9,10 +9,7 @@ class UserPreferenceRepository:
         Crée une nouvelle préférence utilisateur.
         """
         new_preference = UserPreference(
-            type=type,
-            preference=preference,
-            user_id=user_id,
-            account_id=account_id
+            type=type, preference=preference, user_id=user_id, account_id=account_id
         )
         db.session.add(new_preference)
         db.session.commit()
@@ -37,7 +34,9 @@ class UserPreferenceRepository:
         """
         Récupère une préférence utilisateur en fonction de l'ID utilisateur et de l'ID du compte.
         """
-        return UserPreference.query.filter_by(user_id=user_id, account_id=account_id).all()
+        return UserPreference.query.filter_by(
+            user_id=user_id, account_id=account_id
+        ).all()
 
     @staticmethod
     def update(preference_id, **kwargs):

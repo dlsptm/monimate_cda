@@ -1,5 +1,3 @@
-import enum
-
 class TicketStatusEnum:
     open = "open"
     in_progress = "in_progress"

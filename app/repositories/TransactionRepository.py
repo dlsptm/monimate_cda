@@ -4,7 +4,17 @@ from app.models.Transaction import Transaction
 
 class TransactionRepository:
     @staticmethod
-    def create(title, location, amount, category_id, invoice, payment_option_id, is_monthly, user_id, account_id):
+    def create(
+        title,
+        location,
+        amount,
+        category_id,
+        invoice,
+        payment_option_id,
+        is_monthly,
+        user_id,
+        account_id,
+    ):
         """
         Crée une nouvelle transaction avec les informations données.
         """
@@ -17,7 +27,7 @@ class TransactionRepository:
             payment_option_id=payment_option_id,
             is_monthly=is_monthly,
             user_id=user_id,
-            account_id=account_id
+            account_id=account_id,
         )
         db.session.add(new_transaction)
         db.session.commit()

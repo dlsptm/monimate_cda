@@ -1,7 +1,9 @@
-from app.extensions import db
-from app.models.User import User
-from app.models.Account import Account
 import uuid
+
+from app.extensions import db
+from app.models.Account import Account
+from app.models.User import User
+
 
 class UserRepository:
 
@@ -9,9 +11,16 @@ class UserRepository:
         self.bcrypt = bcrypt_instance
 
     @staticmethod
-    def create(email, username, password, role=None, last_active=None, is_active=False,):
+    def create(
+        email,
+        username,
+        password,
+        role=None,
+        last_active=None,
+        is_active=False,
+    ):
         """
-             Crée un nouvel utilisateur avec les informations données.
+        Crée un nouvel utilisateur avec les informations données.
         """
         try:
             if role is None:
@@ -24,7 +33,7 @@ class UserRepository:
                 password=password,
                 is_active=is_active,
                 role=role,
-                last_active=last_active
+                last_active=last_active,
             )
 
             default_account = Account()
@@ -39,14 +48,12 @@ class UserRepository:
             print(f"Erreur lors de la création de l'utilisateur : {e}")
             return None
 
-
     @staticmethod
     def get_all():
         """
         Récupère tous les utilisateurs.
         """
         return User.query.all()
-
 
     @staticmethod
     def get_by_id(user_id):
@@ -55,14 +62,12 @@ class UserRepository:
         """
         return User.query.get(user_id)
 
-
     @staticmethod
     def get_by_email(email):
         """
         Récupère un utilisateur spécifique par son email.
         """
         return User.query.filter_by(email=email).first()
-
 
     @staticmethod
     def update(user_id, **kwargs):
@@ -76,7 +81,6 @@ class UserRepository:
                     setattr(user, key, value)
             db.session.commit()
         return user
-
 
     @staticmethod
     def delete(user_id):

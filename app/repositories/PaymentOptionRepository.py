@@ -9,9 +9,7 @@ class PaymentOptionRepository:
         Crée une nouvelle option de paiement avec un montant d'installment, une fréquence et une date d'échéance.
         """
         new_payment_option = PaymentOption(
-            installment=installment,
-            frequency=frequency,
-            due_date=due_date
+            installment=installment, frequency=frequency, due_date=due_date
         )
         db.session.add(new_payment_option)
         db.session.commit()

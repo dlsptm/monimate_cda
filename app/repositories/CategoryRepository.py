@@ -9,10 +9,7 @@ class CategoryRepository:
         Crée une nouvelle catégorie.
         """
         category = Category(
-            title=title,
-            icon=icon,
-            amount=amount,
-            account_id=account_id
+            title=title, icon=icon, amount=amount, account_id=account_id
         )
         db.session.add(category)
         db.session.commit()
