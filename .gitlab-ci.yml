@@ -1,7 +1,5 @@
 default:
-  image: docker:24.0.5
-  services:
-    - docker:24.0.5-dind
+  image: $CI_REGISTRY_IMAGE
 
 stages:
   - build
@@ -10,6 +8,12 @@ stages:
   - pystan
   - test
   - deploy
+
+cache:
+  paths:
+    - .cache/pypoetry
+    - poetry.lock
+    - pyproject.toml
 
 build-job:
   stage: build
@@ -24,13 +28,6 @@ setup-back-job:
     - ['build-job']
   before_script:
     - apk update
-    - apk add --no-cache build-base openssl-dev bzip2-dev zlib-dev libffi-dev wget
-    - wget https://www.python.org/ftp/python/3.13.0/Python-3.13.0.tgz
-    - tar -xvf Python-3.13.0.tgz
-    - cd Python-3.13.0
-    - ./configure --enable-optimizations
-    - make
-    - make altinstall
     - apk add --no-cache python3 py3-pip
     - pip3 install poetry
   script:
