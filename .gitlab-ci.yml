@@ -1,18 +1,16 @@
 default:
-  image: docker:latest
-  services:
-    - docker:dind
+  image: $CI_REGISTRY_IMAGE
 
 stages:
   - build
   - setup-back
-  - pycs
-  - pystan
   - test
   - deploy
 
 build-job:
   stage: build
+  inherit:
+    default: false
   before_script:
     - mkdir -p $HOME/.docker
     - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
@@ -32,7 +30,7 @@ setup-back-job:
     - poetry add pytest mypy pylint bandit autopep8 flake8 black isort
 
 pycs-job:
-  stage: pycs
+  stage: test
   image: $CI_REGISTRY_IMAGE
   needs:
     - ['setup-back-job']
@@ -43,7 +41,7 @@ pycs-job:
     - poetry run isort app/
 
 pystan-job:
-  stage: pystan
+  stage: test
   image: $CI_REGISTRY_IMAGE
   needs:
     - ['setup-back-job']
