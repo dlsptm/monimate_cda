@@ -1,5 +1,5 @@
 default:
-  image: $CI_REGISTRY_IMAGE
+  image: docker:latest
 
 stages:
   - build
@@ -15,6 +15,11 @@ cache:
     - poetry.lock
     - pyproject.toml
 
+before_script:
+  - apk update
+  - apk add --no-cache python3 py3-pip
+  - pip3 install poetry
+
 build-job:
   stage: build
   script:
@@ -26,10 +31,6 @@ setup-back-job:
   stage: setup-back
   needs:
     - ['build-job']
-  before_script:
-    - apk update
-    - apk add --no-cache python3 py3-pip
-    - pip3 install poetry
   script:
     - poetry install --no-root
 
