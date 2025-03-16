@@ -52,6 +52,11 @@ pystan-job:
     - poetry run pylint app/
     - poetry run bandit -r app/
 
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .venv/
+
 test-job:
   stage: test
   image: $CI_REGISTRY_IMAGE
