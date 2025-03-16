@@ -1,11 +1,18 @@
 default:
   image: $CI_REGISTRY_IMAGE
 
+
 stages:
   - build
   - setup-back
   - test
   - deploy
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - /root/.cache/pypoetry
+    - .venv/
 
 build-job:
   stage: build
@@ -22,17 +29,19 @@ build-job:
     - docker build -t $CI_REGISTRY_IMAGE .
     - docker push $CI_REGISTRY_IMAGE
 
+
 setup-back-job:
   stage: setup-back
   image: $CI_REGISTRY_IMAGE
   needs:
     - ['build-job']
   before_script:
-    - poetry install --no-root
-  script:
     - poetry add pytest mypy pylint bandit autopep8 flake8 black isort
+  script:
+    - poetry install --no-root
 
-pycs-job:
+
+pycs:
   stage: test
   image: $CI_REGISTRY_IMAGE
   needs:
@@ -43,7 +52,8 @@ pycs-job:
     - poetry run black app/
     - poetry run isort app/
 
-pystan-job:
+
+pystan:
   stage: test
   image: $CI_REGISTRY_IMAGE
   needs:
@@ -53,12 +63,8 @@ pystan-job:
     - poetry run pylint app/
     - poetry run bandit -r app/
 
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - .venv/
 
-test-job:
+test:
   stage: test
   image: $CI_REGISTRY_IMAGE
   needs:
@@ -66,7 +72,8 @@ test-job:
   script:
     - poetry run pytest
 
-deploy-job:
+
+deploy:
   stage: deploy
   script:
     - echo "Déploiement de l'application..."
