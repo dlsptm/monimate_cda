@@ -1,4 +1,7 @@
-image: monimate-back-test
+default:
+  image: docker:latest
+  services:
+    - docker:dind
 
 stages:
   - build
@@ -7,20 +10,16 @@ stages:
   - test
   - deploy
 
-
 build-job:
   stage: build
-  image: docker
-  services:
-    - docker:dind
   script:
-    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER  $CI_REGISTRY --password-stdin
     - docker build -t $CI_REGISTRY_IMAGE .
     - docker push $CI_REGISTRY_IMAGE
 
-
 pycs-job:
   stage: pycs
+  needs:
+    - ['build-job']
   script:
     - poetry run autopep8 --in-place --aggressive --recursive .
     - poetry run flake8 app/
@@ -29,6 +28,8 @@ pycs-job:
 
 pystan-job:
   stage: pystan
+  needs:
+    - [ 'build-job' ]
   script:
     - poetry run mypy app/
     - poetry run pylint app/
@@ -36,6 +37,8 @@ pystan-job:
 
 test-job:
   stage: test
+  needs:
+    - [ 'build-job' ]
   script:
     - poetry run pytest
 
