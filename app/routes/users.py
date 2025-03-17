@@ -40,9 +40,13 @@ def register():
             return jsonify({"error": "Email already registered"}), 409
 
         password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
-        user_repository.create(
-            email=email, username=username, password=password_hash, is_active=is_active
-        )
+        user_data = {
+            "email" : email,
+            "username" : username,
+            "password" : password_hash,
+            "is_active" : is_active
+        }
+        user_repository.create(user_data)
 
         return jsonify({"success": "User registered"}), 201
 

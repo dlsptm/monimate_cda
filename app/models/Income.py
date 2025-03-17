@@ -1,15 +1,20 @@
 import uuid
 from datetime import datetime, timezone
+from typing import TYPE_CHECKING
 
 from sqlalchemy import BigInteger
 from sqlalchemy.dialects.postgresql import UUID
 
-from back.app.extensions import db
+from app.extensions import db
 
 amount = db.Column(BigInteger, nullable=False)
 
+if TYPE_CHECKING:
+    from flask_sqlalchemy.model import Model
+else:
+    Model = db.Model
 
-class Income(db.Model):
+class Income(Model):
     __tablename__ = "income"
     id = db.Column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False

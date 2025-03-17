@@ -11,33 +11,26 @@ class UserRepository:
         self.bcrypt = bcrypt_instance
 
     @staticmethod
-    def create(
-        email,
-        username,
-        password,
-        role=None,
-        last_active=None,
-        is_active=False,
-    ):
+    def create(user_data):
         """
         Crée un nouvel utilisateur avec les informations données.
         """
         try:
-            if role is None:
-                role = ["ROLE_USER"]
+            if user_data.get("role") is None:
+                user_data.set("role" , ["ROLE_USER"])
 
             new_user = User(
                 id=str(uuid.uuid4()),
-                email=email,
-                username=username,
-                password=password,
-                is_active=is_active,
-                role=role,
-                last_active=last_active,
+                email=user_data.get("email"),
+                username=user_data.get("username"),
+                password=user_data.get("password"),
+                is_active=user_data.get("is_active"),
+                role=user_data.get("role"),
+                last_active=user_data.get("last_active"),
             )
 
             default_account = Account()
-            default_account.title = "Compte " + username
+            default_account.title = "Compte " + user_data.get("username")
             default_account.owner_id = new_user.get_id()
 
             db.session.add(new_user)

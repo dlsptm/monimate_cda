@@ -4,20 +4,21 @@ from app.models.Transaction import Transaction
 
 class TransactionRepository:
     @staticmethod
-    def create(
-        title,
-        location,
-        amount,
-        category_id,
-        invoice,
-        payment_option_id,
-        is_monthly,
-        user_id,
-        account_id,
-    ):
+    def create(transaction_data):
         """
         Crée une nouvelle transaction avec les informations données.
         """
+
+        title = transaction_data.get("title")
+        location = transaction_data.get("location")
+        amount = transaction_data.get("amount")
+        category_id = transaction_data.get("category_id")
+        invoice = transaction_data.get("invoice")
+        payment_option_id = transaction_data.get("payment_option_id")
+        is_monthly = transaction_data.get("is_monthly")
+        user_id = transaction_data.get("user_id")
+        account_id = transaction_data.get("account_id")
+
         new_transaction = Transaction(
             title=title,
             location=location,

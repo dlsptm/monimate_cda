@@ -43,13 +43,13 @@ def app():
     """Fixture pour créer l'application Flask pour les tests."""
     app = create_test_app()
     yield app
-    # Nettoyage de la base de données après chaque test
+    # Nettoyage de la base de données après chaque tests
     with app.app_context():
-        db.drop_all()  # Supprime toutes les tables après chaque test
+        db.drop_all()  # Supprime toutes les tables après chaque tests
         db.create_all()  # Crée les tables (optionnel mais généralement utilisé)
 
 
-# Fixture pour créer un client de test
+# Fixture pour créer un client de tests
 
 
 @pytest.fixture(scope="function")

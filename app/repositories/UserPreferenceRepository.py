@@ -4,12 +4,12 @@ from app.models.UserPreference import UserPreference
 
 class UserPreferenceRepository:
     @staticmethod
-    def create(type, preference, user_id, account_id):
+    def create(user_type, preference, user_id, account_id):
         """
         Crée une nouvelle préférence utilisateur.
         """
         new_preference = UserPreference(
-            type=type, preference=preference, user_id=user_id, account_id=account_id
+            type=user_type, preference=preference, user_id=user_id, account_id=account_id
         )
         db.session.add(new_preference)
         db.session.commit()
