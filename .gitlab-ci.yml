@@ -35,8 +35,6 @@ setup-back-job:
   image: $CI_REGISTRY_IMAGE
   needs:
     - ['build-job']
-  before_script:
-    - poetry add pytest mypy pylint bandit autopep8 flake8 black isort
   script:
     - poetry install --no-root
 
@@ -46,8 +44,6 @@ pycs:
   image: $CI_REGISTRY_IMAGE
   needs:
     - ['setup-back-job']
-  before_script:
-    - poetry add pytest mypy pylint bandit autopep8 flake8 black isort
   script:
     - poetry run autopep8 --in-place --aggressive --recursive .
     - poetry run flake8 app/
@@ -60,8 +56,6 @@ pystan:
   image: $CI_REGISTRY_IMAGE
   needs:
     - ['setup-back-job']
-  before_script:
-    - poetry add pytest mypy pylint bandit autopep8 flake8 black isort
   script:
     - poetry run mypy app/
     - poetry run pylint app/
@@ -73,8 +67,6 @@ test:
   image: $CI_REGISTRY_IMAGE
   needs:
     - ['setup-back-job']
-  before_script:
-    - poetry add pytest mypy pylint bandit autopep8 flake8 black isort
   script:
     - poetry run pytest
 

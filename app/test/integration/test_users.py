@@ -68,8 +68,8 @@ def test_register_success(client):
             "is_active": True,
         },
     )
-    assert response.status_code == 201
-    assert b"User registered" in response.data
+    assert response.status_code == 201 # nosec
+    assert b"User registered" in response.data # nosec
 
 
 def test_register_existing_email(client):
@@ -82,8 +82,8 @@ def test_register_existing_email(client):
     client.post("/register", json=user_data)
 
     response = client.post("/register", json=user_data)
-    assert response.status_code == 409  # Conflit : email déjà enregistré
-    assert b"Email already registered" in response.data
+    assert response.status_code == 409  # nosec
+    assert b"Email already registered" in response.data # nosec
 
 
 def test_login_success(client):
@@ -99,8 +99,8 @@ def test_login_success(client):
     response = client.post(
         "/login", json={"email": user_data["email"], "password": user_data["password"]}
     )
-    assert response.status_code == 200
-    assert b"Login successful" in response.data
+    assert response.status_code == 200 # nosec
+    assert b"Login successful" in response.data # nosec
 
 
 def test_login_user_not_found(client):
@@ -108,8 +108,8 @@ def test_login_user_not_found(client):
     response = client.post(
         "/login", json={"email": "nonexistent@example.com", "password": "password123"}
     )
-    assert response.status_code == 404
-    assert b"Wrong Email or Password" in response.data
+    assert response.status_code == 404 # nosec
+    assert b"Wrong Email or Password" in response.data # nosec
 
 
 def test_login_invalid_password(client):
@@ -124,8 +124,8 @@ def test_login_invalid_password(client):
     response = client.post(
         "/login", json={"email": user_data["email"], "password": "wrongpassword"}
     )
-    assert response.status_code == 404
-    assert b"Wrong Email or Password" in response.data
+    assert response.status_code == 404 # nosec
+    assert b"Wrong Email or Password" in response.data # nosec
 
 
 if __name__ == "__main__":
