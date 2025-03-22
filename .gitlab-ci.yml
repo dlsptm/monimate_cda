@@ -2,7 +2,10 @@ default:
   image: $CI_REGISTRY_IMAGE:latest
 
 variables:
-  DATABASE_URL: postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@database/$POSTGRES_DB
+  POSTGRES_DB: $POSTGRES_DB
+  POSTGRES_USER: $POSTGRES_USER
+  POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+  POSTGRES_HOST_AUTH_METHOD: trust
 
 stages:
   - build
@@ -69,7 +72,7 @@ pystan:
     - poetry run bandit -r app/
 
 
-test:
+pytest:
   stage: test
   image: $CI_REGISTRY_IMAGE
   services:
@@ -78,7 +81,9 @@ test:
   needs:
     - ['setup-back-job']
   before_script:
-    - apt-get update && apt-get install -y postgresql-client
+    - apt-get update && apt-get install -y postgresql postgresql-client libpq-dev
+    - psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
+
   script:
     - poetry remove pytest
     - poetry add pytest
