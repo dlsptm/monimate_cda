@@ -31,6 +31,7 @@ def register():
         password = data.get("password")
         email = data.get("email")
         is_active = data.get("is_active", False)
+        role = data.get("role", ["ROLE_USER"])
 
         if not email or not password or not username:
             return jsonify({"error": "Email, Username, and Password are required"}), 400
@@ -41,10 +42,11 @@ def register():
 
         password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
         user_data = {
-            "email" : email,
-            "username" : username,
-            "password" : password_hash,
-            "is_active" : is_active
+            "email": email,
+            "username": username,
+            "password": password_hash,
+            "is_active": is_active,
+            "role": role,
         }
         user_repository.create(user_data)
 

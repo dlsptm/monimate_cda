@@ -17,7 +17,7 @@ class UserRepository:
         """
         try:
             if user_data.get("role") is None:
-                user_data.set("role" , ["ROLE_USER"])
+                user_data.set("role", ["ROLE_USER"])
 
             new_user = User(
                 id=str(uuid.uuid4()),

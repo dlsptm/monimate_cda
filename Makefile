@@ -1,3 +1,11 @@
+.PHONY: docker-build
+docker-build:
+	docker build -t registry.gitlab.com/dlsptm/monimate .
+
+.PHONY: docker-push
+docker-push:
+	docker push registry.gitlab.com/dlsptm/monimate
+
 .PHONY: db-init
 db-init:
 	poetry run flask db init

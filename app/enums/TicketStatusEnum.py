@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class TicketStatusEnum(Enum):
     OPEN = "open"
     IN_PROGRESS = "in_progress"

@@ -83,6 +83,7 @@ def test_register_existing_email(client):
         "email": "testusers@example.com",
         "password": "password123",
         "username": "testuser",
+        "is_active": True,
     }
     response = client.post("/register", json=user_data)
     assert response.status_code == 201  # nosec

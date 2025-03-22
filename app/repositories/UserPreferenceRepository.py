@@ -9,7 +9,10 @@ class UserPreferenceRepository:
         Crée une nouvelle préférence utilisateur.
         """
         new_preference = UserPreference(
-            type=user_type, preference=preference, user_id=user_id, account_id=account_id
+            type=user_type,
+            preference=preference,
+            user_id=user_id,
+            account_id=account_id,
         )
         db.session.add(new_preference)
         db.session.commit()

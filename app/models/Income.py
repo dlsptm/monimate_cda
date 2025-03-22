@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 else:
     Model = db.Model
 
+
 class Income(Model):
     __tablename__ = "income"
     id = db.Column(

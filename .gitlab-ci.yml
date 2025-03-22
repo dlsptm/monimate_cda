@@ -1,6 +1,8 @@
 default:
-  image: $CI_REGISTRY_IMAGE
+  image: $CI_REGISTRY_IMAGE:latest
 
+variables:
+  DATABASE_URL: postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@database/$POSTGRES_DB
 
 stages:
   - build
@@ -65,10 +67,20 @@ pystan:
 test:
   stage: test
   image: $CI_REGISTRY_IMAGE
+  services:
+    - name: postgres:latest
+      alias: database
   needs:
     - ['setup-back-job']
+  before_script:
+    - apt-get update && apt-get install -y postgresql-client
+    - psql -h database -U $POSTGRES_USER -d $POSTGRES_DB -c "SELECT 1;" &>/dev/null; do sleep 1; done
   script:
     - poetry run pytest
+  artifacts:
+    when: always
+    reports:
+      junit: junit.xml
 
 
 deploy:
