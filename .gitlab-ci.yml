@@ -80,8 +80,8 @@ test:
   before_script:
     - apt-get update && apt-get install -y postgresql-client
   script:
-    - poetry add pytest
     - poetry remove pytest
+    - poetry add pytest
     - poetry run pytest
 
 
