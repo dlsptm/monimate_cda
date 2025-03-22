@@ -46,6 +46,8 @@ pycs:
   image: $CI_REGISTRY_IMAGE
   needs:
     - ['setup-back-job']
+  before_script:
+    - poetry add autopep8 flake8 black isort
   script:
     - poetry run autopep8 --in-place --aggressive --recursive .
     - poetry run flake8 app/
@@ -58,6 +60,8 @@ pystan:
   image: $CI_REGISTRY_IMAGE
   needs:
     - ['setup-back-job']
+  before_script:
+    - poetry add mypy pylint bandit
   script:
     - poetry run mypy app/
     - poetry run pylint app/
@@ -76,11 +80,8 @@ test:
     - apt-get update && apt-get install -y postgresql-client
     - psql -h database -U $POSTGRES_USER -d $POSTGRES_DB -c "SELECT 1;" &>/dev/null; do sleep 1; done
   script:
+    - poetry add pytest
     - poetry run pytest
-  artifacts:
-    when: always
-    reports:
-      junit: junit.xml
 
 
 deploy:
