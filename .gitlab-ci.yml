@@ -61,7 +61,7 @@ pystan:
   needs:
     - ['setup-back-job']
   before_script:
-    - poetry remove add mypy pylint bandit
+    - poetry remove mypy pylint bandit
     - poetry add mypy pylint bandit
   script:
     - poetry run mypy app/
@@ -79,7 +79,10 @@ test:
     - ['setup-back-job']
   before_script:
     - apt-get update && apt-get install -y postgresql-client
-    - psql -h database -U $POSTGRES_USER -d $POSTGRES_DB -c "SELECT 1;" &>/dev/null; do sleep 1; done
+    - |
+      while ! psql -h database -U $POSTGRES_USER -d $POSTGRES_DB -c "SELECT 1;" &>/dev/null; do
+        sleep 1
+      done
   script:
     - poetry add pytest
     - poetry remove pytest

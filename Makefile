@@ -48,3 +48,8 @@ docker-image-back:
 .PHONY: docker-run-back
 docker-run-back:
 	 docker run --name test-monimate-back -it --rm -w /app -v ./:/app -p 9898:5000 monimate-back-python
+
+
+.PHONY: push
+push:
+	git add . && git commit -m "$(m)" && git push -f
