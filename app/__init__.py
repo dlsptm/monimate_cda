@@ -23,7 +23,7 @@ def create_app():
     )
     app.secret_key = os.getenv("SECRET_KEY")
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", 'postgresql://postgres:@database/monimate_test')
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_ECHO"] = True
 
