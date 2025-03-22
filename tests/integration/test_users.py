@@ -22,7 +22,7 @@ def create_test_app():
     )
     app.secret_key = os.getenv("SECRET_KEY")
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL_TEST",'postgresql://postgres:postgres@database/monimate_test')
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL_TEST",'DATABASE_URL_GITLAB_TEST')
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_ECHO"] = True
     app.config["DEBUG"] = True
