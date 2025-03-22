@@ -79,10 +79,6 @@ test:
     - ['setup-back-job']
   before_script:
     - apt-get update && apt-get install -y postgresql-client
-    - |
-      while ! psql -h database -U $POSTGRES_USER -d $POSTGRES_DB -c "SELECT 1;" &>/dev/null; do
-        sleep 1
-      done
   script:
     - poetry add pytest
     - poetry remove pytest
