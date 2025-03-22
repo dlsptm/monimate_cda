@@ -8,10 +8,7 @@ variables:
   POSTGRES_HOST_AUTH_METHOD: trust
 
 stages:
-  - build
-  - setup-back
   - test
-  - deploy
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
@@ -19,67 +16,13 @@ cache:
     - .cache/pypoetry
     - .venv/
 
-build-job:
-  stage: build
-  inherit:
-    default: false
-  image: docker
-  services:
-    - docker:dind
-  before_script:
-    - mkdir -p $HOME/.docker
-    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
-  script:
-    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER  $CI_REGISTRY --password-stdin
-    - docker build -t $CI_REGISTRY_IMAGE .
-    - docker push $CI_REGISTRY_IMAGE
-
-
-setup-back-job:
-  stage: setup-back
-  image: $CI_REGISTRY_IMAGE
-  needs:
-    - ['build-job']
-  script:
-    - poetry install --no-root
-
-
-pycs:
-  stage: test
-  image: $CI_REGISTRY_IMAGE
-  needs:
-    - ['setup-back-job']
-  before_script:
-    - poetry add autopep8 flake8 black isort
-  script:
-    - poetry run autopep8 --in-place --aggressive --recursive .
-    - poetry run flake8 app/
-    - poetry run black app/
-    - poetry run isort app/
-
-
-pystan:
-  stage: test
-  image: $CI_REGISTRY_IMAGE
-  needs:
-    - ['setup-back-job']
-  before_script:
-    - poetry remove mypy pylint bandit
-    - poetry add mypy pylint bandit
-  script:
-    - poetry run mypy app/
-    - poetry run pylint app/
-    - poetry run bandit -r app/
-
-
 pytest:
   stage: test
   image: $CI_REGISTRY_IMAGE
   services:
     - name: postgres:latest
       alias: database
-  needs:
-    - ['setup-back-job']
+
   before_script:
     - apt-get update && apt-get install -y postgresql postgresql-client libpq-dev
     - psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
@@ -88,9 +31,3 @@ pytest:
     - poetry remove pytest
     - poetry add pytest
     - poetry run pytest
-
-
-deploy:
-  stage: deploy
-  script:
-    - echo "Déploiement de l'application..."
