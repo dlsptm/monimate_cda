@@ -12,4 +12,4 @@ COPY . .
 
 EXPOSE 9898
 
-CMD sh -c "poetry install --no-root && poetry run python run.py"
+CMD sh -c "poetry install && poetry run python run.py"

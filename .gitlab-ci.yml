@@ -8,6 +8,7 @@ variables:
   POSTGRES_HOST_AUTH_METHOD: trust
 
 stages:
+  - build
   - test
 
 cache:
@@ -16,12 +17,30 @@ cache:
     - .cache/pypoetry
     - .venv/pip wheel --no-cache-dir --use-pep517 "networks (==0.3.7)"
 
+
+
+build-job:
+  stage: build
+  inherit:
+    default: false
+  image: docker
+  services:
+    - docker:dind
+  before_script:
+    - mkdir -p $HOME/.docker
+    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+  script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER  $CI_REGISTRY --password-stdin
+    - docker build -t $CI_REGISTRY_IMAGE .
+    - docker push $CI_REGISTRY_IMAGE
+
 pytest:
   stage: test
   services:
     - name: postgres:latest
       alias: database
-
+  needs:
+    - ['build-job']
   before_script:
     - apt-get update && apt-get install -y postgresql postgresql-client libpq-dev
     - psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
