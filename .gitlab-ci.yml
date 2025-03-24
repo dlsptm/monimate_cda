@@ -47,4 +47,4 @@ pytest:
   script:
     - poetry remove pytest
     - poetry add pytest
-    - poetry run pytest
+    - poetry run pytest --maxfail=1 --disable-warnings -v
