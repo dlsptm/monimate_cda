@@ -18,7 +18,6 @@ cache:
 
 pytest:
   stage: test
-  image: $CI_REGISTRY_IMAGE
   services:
     - name: postgres:latest
       alias: database
@@ -28,7 +27,6 @@ pytest:
     - psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
 
   script:
-    - poetry update
     - poetry remove pytest
     - poetry add pytest
     - poetry run pytest
