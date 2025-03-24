@@ -38,7 +38,7 @@ pystan:
 
 .PHONY: test
 test:
-	poetry run pytest
+	poetry run pytest --junitxml --junitprefix
 
 
 .PHONY: docker-image-back
