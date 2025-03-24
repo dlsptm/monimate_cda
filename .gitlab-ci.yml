@@ -18,8 +18,6 @@ cache:
 
 pytest:
   stage: test
-  needs:
-    - ['build-job']
   services:
     - name: postgres:latest
       alias: database
@@ -31,4 +29,4 @@ pytest:
   script:
     - poetry remove pytest
     - poetry add pytest
-    - poetry run pytest --maxfail=1 --disable-warnings -v
+    - poetry run pytest --junitxml=results.xml  --verbose --disable-warnings
