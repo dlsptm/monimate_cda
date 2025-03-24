@@ -8,29 +8,13 @@ variables:
   POSTGRES_HOST_AUTH_METHOD: trust
 
 stages:
-  - build
   - test
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - .cache/pypoetry
-    - .venv/
-
-build-job:
-  stage: build
-  inherit:
-    default: false
-  image: docker
-  services:
-    - docker:dind
-  before_script:
-    - mkdir -p $HOME/.docker
-    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
-  script:
-    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER  $CI_REGISTRY --password-stdin
-    - docker build -t $CI_REGISTRY_IMAGE .
-    - docker push $CI_REGISTRY_IMAGE
+    - .venv/pip wheel --no-cache-dir --use-pep517 "networks (==0.3.7)"
 
 pytest:
   stage: test
