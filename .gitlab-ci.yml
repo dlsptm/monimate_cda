@@ -17,8 +17,6 @@ cache:
     - .cache/pypoetry
     - .venv/pip wheel --no-cache-dir --use-pep517 "networks (==0.3.7)"
 
-
-
 build-job:
   stage: build
   inherit:
