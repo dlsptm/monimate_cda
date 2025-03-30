@@ -20,12 +20,13 @@ def create_test_app():
         static_folder="static",
         static_url_path="/",
     )
+    app.secret_key = os.getenv("SECRET_KEY", 'default')
+
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL_TEST")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_ECHO"] = True
     app.config["DEBUG"] = True
     app.config["TESTING"] = True
-    print(f"DATABASE_URL_TEST: {os.getenv('DATABASE_URL_TEST')}")
     db.init_app(app)
     bcrypt.init_app(app)
 
