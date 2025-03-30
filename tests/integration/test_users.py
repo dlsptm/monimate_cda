@@ -72,7 +72,6 @@ def test_register_success(client):
             "is_active": True,
         },
     )
-    print("**************PRINT*****************", response.json)
     assert response.status_code == 201  # nosec
 
     response_data = json.loads(response.data)
@@ -109,6 +108,7 @@ def test_login_success(client):
     response = client.post(
         "/login", json={"email": user_data["email"], "password": user_data["password"]}
     )
+    print("******************PRINT*******************", response.json)
     assert response.status_code == 200  # nosec
     assert b"Login successful" in response.data  # nosec
 
