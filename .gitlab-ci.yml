@@ -84,6 +84,9 @@ pytest:
     - until pg_isready -h postgres -p 5432 -U "$POSTGRES_USER"; do echo "Waiting for database..."; sleep 2; done
     - psql -h "database" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
     - poetry install --no-root
+    - echo "DATABASE_URL_TEST=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@database:5432/$POSTGRES_DB" > .env
+    - set -a && source .env && set +a
+
 
   script:
     - poetry run flask db upgrade
