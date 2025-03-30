@@ -22,8 +22,7 @@ cache:
 
 before_script:
   - poetry install --no-root
-  - poetry env info
-  - source .venv/bin/activate
+
 
 build-job:
   stage: build
