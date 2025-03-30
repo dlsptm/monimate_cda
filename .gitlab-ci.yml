@@ -1,5 +1,5 @@
 default:
-  image: $CI_REGISTRY_IMAGE:latest
+  image: $CI_REGISTRY_IMAGE
 
 variables:
   POSTGRES_DB: $POSTGRES_DB
@@ -9,13 +9,15 @@ variables:
 
 stages:
   - build
+  - setup-back
   - test
+  - deploy
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - .cache/pypoetry
-    - .venv/pip wheel --no-cache-dir --use-pep517 "networks (==0.3.7)"
+    - .venv/
 
 build-job:
   stage: build
@@ -32,18 +34,54 @@ build-job:
     - docker build -t $CI_REGISTRY_IMAGE .
     - docker push $CI_REGISTRY_IMAGE
 
+
+setup-back-job:
+  stage: setup-back
+  needs:
+    - ["build-job"]
+  script:
+    - poetry install --no-root
+
+
+pycs:
+  stage: test
+  needs:
+    - ["setup-back-job"]
+  script:
+    - poetry run autopep8 --in-place --aggressive --recursive .
+    - poetry run flake8 app/
+    - poetry run black app/
+    - poetry run isort app/
+
+
+pystan:
+  stage: test
+  needs:
+    - ["setup-back-job"]
+  script:
+    - poetry run mypy app/
+    - poetry run pylint app/
+    - poetry run bandit -r app/
+
+
 pytest:
   stage: test
   services:
     - name: postgres:latest
-      alias: database
+      alias: postgres
   needs:
-    - ['build-job']
+    - ["setup-back-job"]
   before_script:
     - apt-get update && apt-get install -y postgresql postgresql-client libpq-dev
+    - until pg_isready -h postgres -p 5432 -U "$POSTGRES_USER"; do echo "Waiting for database..."; sleep 2; done
     - psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
 
   script:
-    - poetry remove pytest
-    - poetry add pytest
     - poetry run pytest --junitxml=results.xml  --verbose --disable-warnings
+
+
+deploy:
+  stage: deploy
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:latest
+    - docker run -d -p 9898:9898 --env-file .env $CI_REGISTRY_IMAGE:latest

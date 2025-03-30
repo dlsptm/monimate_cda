@@ -1,15 +1,18 @@
 FROM python:3.13
 
-RUN apt-get update && apt-get install -y libpq-dev gcc git &&\
-    curl -sSL https://install.python-poetry.org | python3 - && \
-    export PATH="$HOME/.local/bin:$PATH"
+RUN apt-get update && apt-get install -y libpq-dev gcc git && \
+    rm -rf /var/lib/apt/lists/* && \
+    curl -sSL https://install.python-poetry.org | python3 -
 
 ENV PATH="/root/.local/bin:$PATH"
 
 WORKDIR /app
 
+COPY pyproject.toml poetry.lock ./
+RUN poetry install --no-root
+
 COPY . .
 
 EXPOSE 9898
 
-CMD sh -c "poetry install && poetry run python run.py"
+CMD ["poetry", "run", "python", "run.py"]
