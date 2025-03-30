@@ -45,6 +45,7 @@ setup-back-job:
   needs:
     - ["build-job"]
   script:
+    - poetry env info
     - poetry config virtualenvs.create true
     - poetry config virtualenvs.in-project true
     - poetry install --no-root
