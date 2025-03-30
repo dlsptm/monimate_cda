@@ -20,7 +20,7 @@ def create_test_app():
         static_folder="static",
         static_url_path="/",
     )
-    app.secret_key = os.getenv("SECRET_KEY")
+    app.secret_key = os.getenv("SECRET_KEY", "test_secrey_key")
 
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL_TEST", "postgresql://dlsptm:dlsptm@database/monimate_test")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
