@@ -19,6 +19,11 @@ cache:
     - .cache/pypoetry
     - .venv/
 
+
+before_script:
+  - poetry install --no-root
+  - source .venv/bin/activate
+
 build-job:
   stage: build
   inherit:
@@ -40,7 +45,10 @@ setup-back-job:
   needs:
     - ["build-job"]
   script:
+    - poetry config virtualenvs.create true
+    - poetry config virtualenvs.in-project true
     - poetry install --no-root
+    - ls -la .venv
 
 
 pycs:
