@@ -6,6 +6,8 @@ variables:
   POSTGRES_USER: $POSTGRES_USER
   POSTGRES_PASSWORD: $POSTGRES_PASSWORD
   POSTGRES_HOST_AUTH_METHOD: trust
+  PYTHONUNBUFFERED: "1"
+
 
 stages:
   - build
@@ -84,7 +86,7 @@ pytest:
     - poetry install --no-root
 
   script:
-    - poetry run pytest --junitxml=results.xml  --verbose --disable-warnings
+    - poetry run pytest -s --junitxml=results.xml  --verbose --disable-warnings
 
 
 deploy:

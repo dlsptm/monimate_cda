@@ -26,6 +26,7 @@ def create_test_app():
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_ECHO"] = True
     app.config["DEBUG"] = True
+    app.config["TESTING"] = True
 
     db.init_app(app)
     bcrypt.init_app(app)
@@ -71,8 +72,7 @@ def test_register_success(client):
             "is_active": True,
         },
     )
-
-    print(response.data)
+    print("**************PRINT*****************", response.json)
     assert response.status_code == 201  # nosec
 
     response_data = json.loads(response.data)
