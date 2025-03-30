@@ -83,10 +83,10 @@ pytest:
     - apt-get update && apt-get install -y postgresql postgresql-client libpq-dev
     - until pg_isready -h postgres -p 5432 -U "$POSTGRES_USER"; do echo "Waiting for database..."; sleep 2; done
     - psql -h "database" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
-    - poetry run flask db upgrade
     - poetry install --no-root
 
   script:
+    - poetry run flask db upgrade
     - poetry run pytest -s --junitxml=results.xml  --verbose --disable-warnings
 
 
