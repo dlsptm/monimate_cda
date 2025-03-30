@@ -90,7 +90,7 @@ pytest:
     - poetry run pytest -s --junitxml=results.xml  --verbose --disable-warnings
 
 
-deploy:
+deploy-job:
   stage: deploy
   needs: ['build-job']
   inherit:
