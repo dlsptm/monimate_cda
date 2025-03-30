@@ -92,10 +92,13 @@ pytest:
 
 deploy:
   stage: deploy
-  needs:
-    - pytest
-    - pycs
-    - pystan
+  needs: ['build-job']
+  inherit:
+    default: false
+  tags:
+    - deploy
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - docker pull $CI_REGISTRY_IMAGE:latest
     - docker run -d -p 9898:9898 --env-file .env $CI_REGISTRY_IMAGE:latest
