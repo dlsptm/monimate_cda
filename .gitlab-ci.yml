@@ -16,7 +16,7 @@ stages:
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
-    - .cache/pypoetry
+    - /root/.cache/pypoetry/virtualenvs
     - .venv/
 
 
@@ -48,6 +48,7 @@ setup-back-job:
     - poetry config virtualenvs.create true
     - poetry config virtualenvs.in-project true
     - poetry install --no-root
+    - ls -la .venv
 
 
 pycs:
@@ -82,6 +83,7 @@ pytest:
     - apt-get update && apt-get install -y postgresql postgresql-client libpq-dev
     - until pg_isready -h postgres -p 5432 -U "$POSTGRES_USER"; do echo "Waiting for database..."; sleep 2; done
     - psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
+    - poetry install --no-root
 
   script:
     - poetry run pytest --junitxml=results.xml  --verbose --disable-warnings
@@ -89,6 +91,10 @@ pytest:
 
 deploy:
   stage: deploy
+  needs:
+    - pytest
+    - pycs
+    - pystan
   script:
     - docker pull $CI_REGISTRY_IMAGE:latest
     - docker run -d -p 9898:9898 --env-file .env $CI_REGISTRY_IMAGE:latest
