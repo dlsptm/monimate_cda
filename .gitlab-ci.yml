@@ -7,6 +7,7 @@ variables:
   POSTGRES_PASSWORD: $POSTGRES_PASSWORD
   POSTGRES_HOST_AUTH_METHOD: trust
   PYTHONUNBUFFERED: "1"
+  VIRTUAL_ENV_PATH: /venv
 
 
 stages:
@@ -18,12 +19,13 @@ stages:
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
-    - /root/.cache/pypoetry/virtualenvs
-    - .venv/
+    # - /root/.cache/pypoetry/virtualenvs
+    - ${VIRTUAL_ENV_PATH}
 
 
 before_script:
-  - poetry install --no-root
+  - poetry config virtualenvs.path ${VIRTUAL_ENV_PATH}
+  # - poetry install --no-root
 
 
 build-job:
