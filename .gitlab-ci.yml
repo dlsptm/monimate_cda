@@ -1,5 +1,5 @@
 default:
-  image: $CI_REGISTRY_IMAGE
+  image: $CI_REGISTRY_IMAGE #todo mettre image php
 
 variables:
   POSTGRES_DB: $POSTGRES_DB
@@ -54,6 +54,7 @@ setup-back-job:
   script:
     #- poetry config virtualenvs.create true
     #- poetry config virtualenvs.in-project true
+    - pwd
     - poetry install --no-root
     - ls ${VIRTUAL_ENV_PATH}
 
@@ -62,6 +63,9 @@ pycs:
   #needs:
   #  - ["setup-back-job"]
   script:
+    - pwd
+    - poetry config virtualenvs.path
+    - ls $(poetry config virtualenvs.path)
     - poetry run autopep8 --in-place --aggressive --recursive .
     - poetry run flake8 app/
     - poetry run black app/
