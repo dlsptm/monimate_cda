@@ -27,7 +27,7 @@ before_script:
   - poetry config virtualenvs.path
   - echo ${VIRTUAL_ENV_PATH}
   - poetry config virtualenvs.path ${VIRTUAL_ENV_PATH}
-  - ls ${VIRTUAL_ENV_PATH}
+  #`- ls ${VIRTUAL_ENV_PATH}
   # - poetry install --no-root
 
 
