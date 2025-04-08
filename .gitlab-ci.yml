@@ -57,6 +57,9 @@ setup-back-job:
     - pwd
     - poetry install --no-root
     - ls ${VIRTUAL_ENV_PATH}
+  artifacts:
+    paths:
+      - ${VIRTUAL_ENV_PATH}
 
 pycs:
   stage: test
