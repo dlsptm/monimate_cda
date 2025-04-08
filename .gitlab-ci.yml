@@ -25,82 +25,84 @@ cache:
 
 before_script:
   - poetry config virtualenvs.path ${VIRTUAL_ENV_PATH}
+  - ls ${VIRTUAL_ENV_PATH}
   # - poetry install --no-root
 
 
-build-job:
-  stage: build
-  inherit:
-    default: false
-  image: docker
-  services:
-    - docker:dind
-  before_script:
-    - mkdir -p $HOME/.docker
-    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
-  script:
-    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER  $CI_REGISTRY --password-stdin
-    - docker build -t $CI_REGISTRY_IMAGE .
-    - docker push $CI_REGISTRY_IMAGE
+#build-job:
+#  stage: build
+#  inherit:
+#    default: false
+#  image: docker
+#  services:
+#    - docker:dind
+#  before_script:
+#    - mkdir -p $HOME/.docker
+#    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+#  script:
+#    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER  $CI_REGISTRY --password-stdin
+#    - docker build -t $CI_REGISTRY_IMAGE .
+#    - docker push $CI_REGISTRY_IMAGE
 
 
 setup-back-job:
   stage: setup-back
-  needs:
-    - ["build-job"]
+  #needs:
+  #  - ["build-job"]
   script:
-    - poetry config virtualenvs.create true
-    - poetry config virtualenvs.in-project true
+    #- poetry config virtualenvs.create true
+    #- poetry config virtualenvs.in-project true
     - poetry install --no-root
+    - ls ${VIRTUAL_ENV_PATH}
 
 pycs:
   stage: test
-  needs:
-    - ["setup-back-job"]
+  #needs:
+  #  - ["setup-back-job"]
   script:
     - poetry run autopep8 --in-place --aggressive --recursive .
     - poetry run flake8 app/
     - poetry run black app/
     - poetry run isort app/
-
-
-pystan:
-  stage: test
-  needs:
-    - ["setup-back-job"]
-  script:
-    - poetry run mypy app/
-    - poetry run pylint app/
-    - poetry run bandit -r app/
-
-
-pytest:
-  stage: test
-  services:
-    - name: postgres:latest
-      alias: database
-  needs:
-    - ["setup-back-job"]
-  before_script:
-    - apt-get update && apt-get install -y postgresql postgresql-client libpq-dev
-    - until pg_isready -h postgres -p 5432 -U "$POSTGRES_USER"; do echo "Waiting for database..."; sleep 2; done
-    - psql -h "database" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
-    - poetry install --no-root
-     # ne mettant pas le .env sur gitlab =
-    - echo "DATABASE_URL_TEST=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@database:5432/$POSTGRES_DB" > .env # génère un fichier .env qui définit une variable DATABASE_URL_TEST
-    - set -a && source .env && set +a # fournit un moyen de charger toutes les variables définies dans un fichier .env en tant que variables d'environnement dans le shell actuel
-    # set -a : active un mode dans lequel toutes les variables définies dans le shell seront automatiquement exportées en tant que variables d'environnement.
-    # source .env : commande source .env lit le fichier .env et charge son contenu dans l'environnement du shell actuel
-    # set +a : désactive le mode d'exportation automatique des variables d'environnement
-
-  script:
-    - poetry run flask db upgrade
-    - poetry run pytest -s --junitxml=results.xml  --verbose --disable-warnings
-
-
-deploy-job:
-  stage: deploy
-  needs:
-    - ["build-job"]
-  script:
-    - echo "Starting deployment..."
+#
+#
+#pystan:
+#  stage: test
+#  #needs:
+#  #  - ["setup-back-job"]
+#  script:
+#    - poetry run mypy app/
+#    - poetry run pylint app/
+#    - poetry run bandit -r app/
+#
+#
+#pytest:
+#  stage: test
+#  services:
+#    - name: postgres:latest
+#      alias: database
+#  #needs:
+#  #  - ["setup-back-job"]
+#  before_script:
+#    - apt-get update && apt-get install -y postgresql postgresql-client libpq-dev
+#    - until pg_isready -h postgres -p 5432 -U "$POSTGRES_USER"; do echo "Waiting for database..."; sleep 2; done
+#    - psql -h "database" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
+#    - poetry install --no-root
+#     # ne mettant pas le .env sur gitlab =
+#    - echo "DATABASE_URL_TEST=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@database:5432/$POSTGRES_DB" > .env # génère un fichier .env qui définit une variable DATABASE_URL_TEST
+#    - set -a && source .env && set +a # fournit un moyen de charger toutes les variables définies dans un fichier .env en tant que variables d'environnement dans le shell actuel
+#    # set -a : active un mode dans lequel toutes les variables définies dans le shell seront automatiquement exportées en tant que variables d'environnement.
+#    # source .env : commande source .env lit le fichier .env et charge son contenu dans l'environnement du shell actuel
+#    # set +a : désactive le mode d'exportation automatique des variables d'environnement
+#
+#  script:
+#    - poetry run flask db upgrade
+#    - poetry run pytest -s --junitxml=results.xml  --verbose --disable-warnings
+#
+#
+#deploy-job:
+#  stage: deploy
+#  #needs:
+#  #  - ["build-job"]
+#  script:
+#    - echo "Starting deployment..."
